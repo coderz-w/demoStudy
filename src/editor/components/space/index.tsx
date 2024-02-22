@@ -1,6 +1,6 @@
-// src/editor/components/space/index.tsx
 import { Space as AntdSpace } from "antd";
-import React, { useEffect } from "react";
+import type { SpaceSize } from "antd/es/space";
+import React from "react";
 import { useDrop } from "react-dnd";
 import { ItemType } from "../../item-type";
 
@@ -10,12 +10,11 @@ interface Props {
   children: any;
   // 当前组件的id
   id: number;
+  // 当前组件的尺寸
+  size: SpaceSize;
 }
 
-const Space: React.FC<Props> = ({children,id}) => {
-  useEffect(()=>{
-console.log(id)
-  },[])
+const Space: React.FC<Props> = ({ children, id, size }) => {
   const [{ canDrop }, drop] = useDrop(() => ({
     accept: [ItemType.Space, ItemType.Button],
     drop: (_, monitor) => {
@@ -24,7 +23,6 @@ console.log(id)
         return;
       }
 
-      // 这里把当前组件的id返回出去，在拖拽结束事件里可以拿到这个id。
       return {
         id,
       };
@@ -38,6 +36,7 @@ console.log(id)
   if (!children?.length) {
     return (
       <AntdSpace
+        data-component-id={id}
         ref={drop}
         className="p-[16px]"
         style={{ border: canDrop ? "1px solid #ccc" : "none" }}
@@ -49,6 +48,8 @@ console.log(id)
 
   return (
     <AntdSpace
+      size={size}
+      data-component-id={id}
       ref={drop}
       className="p-[16px]"
       style={{ border: canDrop ? "1px solid #ccc" : "none" }}
