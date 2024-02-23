@@ -25,6 +25,7 @@ interface State {
   components: Component[];
   curComponentId?: number | null;
   curComponent: Component | null;
+  mode:"edit"|"preview"
 }
 
 interface Action {
@@ -44,9 +45,12 @@ interface Action {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateComponentProps: (componentId: number, props: any) => void;
+  setMode:(mode: State["mode"])=>void
 }
 
+
 export const useComponets = create<State & Action>((set) => ({
+  mode:"edit",
   components: [],
   curComponentId: null,
   curComponent: null,
@@ -79,6 +83,9 @@ export const useComponets = create<State & Action>((set) => ({
       }
       return { components: [...state.components] };
     }),
+    setMode:(mode)=>{
+      set({mode})
+    }
 }));
 
 function getComponentById(

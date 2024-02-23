@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import  Button  from "../../components/button";
 import React, { useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import SelectedMask from "../../common/selected-mask";
