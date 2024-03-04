@@ -1,4 +1,4 @@
-import  Button  from "../../components/button";
+import Button from "../../components/button";
 import React, { useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import SelectedMask from "../../common/selected-mask";
@@ -54,7 +54,29 @@ const EditStage: React.FC = () => {
       }
     };
   }, []);
+  function formatProps(component: Component) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const props = Object.keys(component.props || {}).reduce<any>(
+      (prev, cur) => {
+        if (typeof component.props[cur] === "object") {
+          if (component.props[cur]?.type === "static") {
+            prev[cur] = component.props[cur].value;
+          } else if (component.props[cur]?.type === "variable") {
+            const variableName = component.props[cur].value;
 
+            prev[cur] = `\${${variableName}}`;
+          }
+        } else {
+          prev[cur] = component.props[cur];
+        }
+
+        return prev;
+      },
+      {}
+    );
+console.log(props)
+    return props;
+  }
   function renderComponents(components: Component[]): React.ReactNode {
     return components.map((component: Component) => {
       if (!ComponentMap[component.name]) {
@@ -62,13 +84,14 @@ const EditStage: React.FC = () => {
       }
 
       if (ComponentMap[component.name]) {
+        const props = formatProps(component);
         return React.createElement(
           ComponentMap[component.name],
           {
             key: component.id,
             id: component.id,
             "data-component-id": component.id,
-            ...component.props,
+            ...props,
           },
           component.props.children || renderComponents(component.children || [])
         );

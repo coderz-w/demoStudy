@@ -1,7 +1,8 @@
-import { Form, Input, Select } from "antd";
+import { Form, Select } from "antd";
 import { useEffect } from "react";
 import { ItemType } from "../../item-type";
 import { useComponets } from "../../stores/components";
+import SettingFormItemInput from "../../common/setting-form-item.tsx/input";
 
 const componentSettingMap = {
   [ItemType.Button]: [
@@ -15,7 +16,7 @@ const componentSettingMap = {
       ],
     },
     {
-      name: "children",
+      name: "text",
       label: "文本",
       type: "input",
     },
@@ -64,7 +65,7 @@ const ComponentAttr = () => {
     if (type === "select") {
       return <Select options={options} />;
     } else if (type === "input") {
-      return <Input />;
+      return <SettingFormItemInput />;
     }
   }
 
